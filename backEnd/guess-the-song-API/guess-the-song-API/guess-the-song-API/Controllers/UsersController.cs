@@ -18,16 +18,16 @@ namespace guess_the_song_API.Controllers
         }
         // GET: api/<UsersController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<ActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            return Ok(_context.Users);
         }
 
         // GET api/<UsersController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult> Get(int id)
         {
-            return "value";
+            return Ok(_context.Users.First(x => x.UserId == id));
         }
 
         // POST api/<UsersController>
