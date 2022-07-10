@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { User } from 'src/Models/user.model';
-import { AuthService } from 'src/Services/auth.service';
+import { Router } from '@angular/router';
+import { User } from 'src/app/Models/user.model';
+import { AuthService } from 'src/app/Services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -15,11 +16,13 @@ export class RegisterComponent implements OnInit {
   public password: string = '';
   public repeatedPassword: string = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, public router: Router) {}
 
   ngOnInit(): void {}
 
   public Register(): void {
+    if (this.password != this.repeatedPassword) return;
+
     let user: User = {
       Ime: this.name,
       Priimek: this.surname,
@@ -27,6 +30,8 @@ export class RegisterComponent implements OnInit {
       Pass: this.password,
     };
 
-    this.authService.createUser(user).subscribe();
+    this.authService.createUser(user).subscribe((response) => {
+      if (response.status == 200) this.router.navigate(['login']);
+    });
   }
 }
