@@ -22,6 +22,7 @@ namespace guess_the_song_API.JWTManager
             {
                 return null;
             }
+            var user = _context.Users.First(x => x.Username == users.Username && x.Pass == users.Pass);
 
             // Else we generate JSON Web Token
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -30,7 +31,7 @@ namespace guess_the_song_API.JWTManager
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, users.Username)
+                    new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(10),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)

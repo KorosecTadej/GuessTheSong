@@ -18,15 +18,15 @@ builder.Services.AddAuthentication(x => {
     o.SaveToken = true;
     o.TokenValidationParameters = new TokenValidationParameters
     {
-        ValidateLifetime = false,
         IssuerSigningKey = new SymmetricSecurityKey(Key)
     };
 });
 
-builder.Services.AddControllers();
 builder.Services.AddDbContext<DataContext>();
 
 builder.Services.AddScoped<IJWTManagerRepository, JWTManagerRepository>();
+
+builder.Services.AddControllers();
 
 var app = builder.Build();
 

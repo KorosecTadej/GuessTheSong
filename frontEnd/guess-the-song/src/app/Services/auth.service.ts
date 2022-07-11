@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from 'src/app/Models/user.model';
+import jwt_decode from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root',
@@ -32,5 +33,16 @@ export class AuthService {
     } else {
       return false;
     }
+  }
+
+  public getUser(): Observable<any> {
+    let token = JSON.parse(localStorage.getItem('token') || '{}');
+    let userId: any = jwt_decode(token);
+    return this.httpClient.get<any>(
+      `http://localhost:5198/api/Users/` + userId.nameid,
+      {
+        observe: 'response',
+      }
+    );
   }
 }

@@ -33,7 +33,8 @@ namespace guess_the_song_API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
-            return Ok(_context.Users.First(x => x.UserId == id));
+            var user = _context.Users.First(x => x.UserId == id);
+            return Ok(user);
         }
 
         // POST api/<UsersController>

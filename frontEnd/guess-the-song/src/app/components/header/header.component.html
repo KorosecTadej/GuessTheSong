@@ -8,6 +8,7 @@
   </button>
   <span>Guess The Song</span>
   <span class="example-spacer"></span>
+  <span style="float: right">{{ username }}</span>
   <button
     *ngIf="isUserLoggedIn"
     (click)="logout()"
