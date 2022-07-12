@@ -16,6 +16,8 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { AuthInterceptor } from './Interceptor/auth-interceptor.interceptor';
+import { GameComponent } from './components/game/game.component';
+import { GameSettingsComponent } from './components/game-settings/game-settings.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,8 @@ import { AuthInterceptor } from './Interceptor/auth-interceptor.interceptor';
     RegisterComponent,
     HomePageComponent,
     HeaderComponent,
+    GameComponent,
+    GameSettingsComponent,
   ],
   imports: [
     BrowserModule,

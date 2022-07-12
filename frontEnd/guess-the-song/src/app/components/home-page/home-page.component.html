@@ -11,10 +11,23 @@
     <button
       mat-raised-button
       color="primary"
-      style="height: 60px; width: 260px"
-      (click)="goToJoinRoom()"
+      style="height: 60px; width: 260px; margin-bottom: 20px"
+      (click)="showJoinRoomInput()"
     >
       Join room
+    </button>
+    <mat-form-field *ngIf="joinRoomVisible" appearance="fill">
+      <mat-label>Room code</mat-label>
+      <input type="password" matInput />
+    </mat-form-field>
+    <button
+      *ngIf="joinRoomVisible"
+      mat-raised-button
+      color="primary"
+      style="height: 60px; width: 260px"
+      (click)="joinRoom()"
+    >
+      Join
     </button>
   </div>
 </div>

@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
 
     this.authService.authorize(user).subscribe((response) => {
       if (response.status == 200) {
-        localStorage.setItem('token', JSON.stringify(response.body.token));
+        localStorage.setItem('token', response.body.token);
         this.router.navigate(['home-page']);
       }
     });

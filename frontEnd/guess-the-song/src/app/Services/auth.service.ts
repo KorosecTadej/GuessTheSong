@@ -36,7 +36,7 @@ export class AuthService {
   }
 
   public getUser(): Observable<any> {
-    let token = JSON.parse(localStorage.getItem('token') || '{}');
+    let token = localStorage.getItem('token') || '{}';
     let userId: any = jwt_decode(token);
     return this.httpClient.get<any>(
       `http://localhost:5198/api/Users/` + userId.nameid,

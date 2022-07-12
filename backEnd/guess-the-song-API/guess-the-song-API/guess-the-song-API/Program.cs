@@ -7,6 +7,7 @@ using guess_the_song_API.JWTManager;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<DataContext>();
 
 builder.Services.AddAuthentication(x => {
 
@@ -14,15 +15,18 @@ builder.Services.AddAuthentication(x => {
     x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
 }).AddJwtBearer(o => {
+    o.RequireHttpsMetadata = false;
     var Key = Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"]);
     o.SaveToken = true;
     o.TokenValidationParameters = new TokenValidationParameters
     {
-        IssuerSigningKey = new SymmetricSecurityKey(Key)
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateLifetime = false,
+        IssuerSigningKey = new SymmetricSecurityKey(Key),
+        ValidateIssuerSigningKey = true
     };
 });
-
-builder.Services.AddDbContext<DataContext>();
 
 builder.Services.AddScoped<IJWTManagerRepository, JWTManagerRepository>();
 
@@ -30,14 +34,17 @@ builder.Services.AddControllers();
 
 var app = builder.Build();
 
-app.UseRouting();
-
 app.UseHttpsRedirection();
+
+app.UseRouting();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();

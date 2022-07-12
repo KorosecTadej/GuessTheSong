@@ -33,7 +33,7 @@ namespace guess_the_song_API.JWTManager
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString())
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(10),
+                Expires = DateTime.UtcNow.AddDays(30),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

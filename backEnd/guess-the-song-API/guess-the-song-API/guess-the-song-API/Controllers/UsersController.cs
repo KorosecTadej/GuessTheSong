@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace guess_the_song_API.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -30,6 +29,7 @@ namespace guess_the_song_API.Controllers
         }
 
         // GET api/<UsersController>/5
+        [Authorize(AuthenticationSchemes = Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
