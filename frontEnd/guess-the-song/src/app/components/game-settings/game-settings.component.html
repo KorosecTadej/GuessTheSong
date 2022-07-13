@@ -1,1 +1,95 @@
-<div class="background"></div>
+<div class="background">
+  <label
+    style="position: relative; bottom: 15%; font-size: 30px; font-weight: bold"
+    id="example-name-label"
+    class="example-name-label"
+    >Room code: {{ roomCode }}
+  </label>
+  <div class="row">
+    <div class="leftTab">
+      <div class="example-label-container">
+        <label id="example-name-label" class="example-name-label"
+          >Number of quiz questions:
+        </label>
+        <label
+          style="
+            color: purple;
+            font-weight: bold;
+            font-size: 20px;
+            font-weight: bold;
+          "
+          class="example-value-label"
+          >{{ NumberOfQuestionsValue }}</label
+        >
+      </div>
+      <mat-slider
+        class="example-margin"
+        [max]="20"
+        [min]="0"
+        [step]="1"
+        [thumbLabel]="thumbLabel"
+        [tickInterval]="getSliderTickInterval()"
+        [(ngModel)]="NumberOfQuestionsValue"
+        aria-labelledby="example-name-label"
+      >
+      </mat-slider>
+      <div class="example-label-container">
+        <label id="example-name-label" class="example-name-label"
+          >Answer Time (sec):
+        </label>
+        <label
+          style="
+            color: purple;
+            font-weight: bold;
+            font-size: 20px;
+            font-weight: bold;
+          "
+          >{{ QuestionTimeValue }}</label
+        >
+      </div>
+      <mat-slider
+        class="example-margin"
+        [max]="20"
+        [min]="0"
+        [step]="1"
+        [thumbLabel]="thumbLabel"
+        [tickInterval]="getSliderTickInterval()"
+        [(ngModel)]="QuestionTimeValue"
+        aria-labelledby="example-name-label"
+      >
+      </mat-slider>
+      <mat-form-field appearance="fill" class="Mat-label">
+        <mat-label>Number of anwsers</mat-label>
+        <mat-select>
+          <mat-option value="2"> 2 answers </mat-option>
+          <mat-option value="4"> 4 answers </mat-option>
+          <mat-option value="6"> 6 answers </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="RightTab" style="width: 15%">
+      <mat-label style="margin-left: 12px; font-weight: bold; font-size: 25px"
+        >Joined Players:</mat-label
+      >
+      <mat-selection-list #shoes [multiple]="false">
+        <mat-list-option *ngFor="let shoe of typesOfShoes" [value]="shoe">
+          {{ shoe }}
+        </mat-list-option>
+      </mat-selection-list>
+    </div>
+  </div>
+  <button
+    mat-raised-button
+    color="primary"
+    style="
+      position: relative;
+      top: 10%;
+      height: 60px;
+      width: 260px;
+      margin-bottom: 20px;
+    "
+    (click)="startGame()"
+  >
+    Start game
+  </button>
+</div>

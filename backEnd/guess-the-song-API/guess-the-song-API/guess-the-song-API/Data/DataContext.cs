@@ -20,5 +20,6 @@ namespace guess_the_song_API.Data
         }
 
         public DbSet<Users> Users { get; set; }
+        public DbSet<Rooms> Rooms { get; set; }
     }
 }

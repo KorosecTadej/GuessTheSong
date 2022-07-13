@@ -18,6 +18,9 @@ import { HomePageComponent } from './components/home-page/home-page.component';
 import { AuthInterceptor } from './Interceptor/auth-interceptor.interceptor';
 import { GameComponent } from './components/game/game.component';
 import { GameSettingsComponent } from './components/game-settings/game-settings.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -40,6 +43,9 @@ import { GameSettingsComponent } from './components/game-settings/game-settings.
     MatInputModule,
     FormsModule,
     HttpClientModule,
+    MatSelectModule,
+    MatSliderModule,
+    MatListModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

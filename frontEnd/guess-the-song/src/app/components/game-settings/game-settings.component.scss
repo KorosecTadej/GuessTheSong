@@ -7,3 +7,39 @@
     height: calc(100% - 64px);
     width: 100%;
 }
+
+.row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.leftTab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15%;
+}
+
+.rightTab {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+  
+  .example-margin {
+    margin: 8px;
+  }
+  
+  .mat-slider-horizontal {
+    max-width: 300px;
+    width: 100%;
+  }
+
+  .Mat-label {
+    width: 300px;
+  }
