@@ -1,9 +1,10 @@
-<div class="background">
+<div *ngIf="room != null" class="background">
   <label
+    *ngIf="room != null"
     style="position: relative; bottom: 15%; font-size: 30px; font-weight: bold"
     id="example-name-label"
     class="example-name-label"
-    >Room code: {{ roomCode }}
+    >Room code: {{ room.roomCode }}
   </label>
   <div class="row">
     <div class="leftTab">
@@ -60,7 +61,7 @@
       </mat-slider>
       <mat-form-field appearance="fill" class="Mat-label">
         <mat-label>Number of anwsers</mat-label>
-        <mat-select>
+        <mat-select [(value)]="NoOfAnswers">
           <mat-option value="2"> 2 answers </mat-option>
           <mat-option value="4"> 4 answers </mat-option>
           <mat-option value="6"> 6 answers </mat-option>
@@ -72,13 +73,14 @@
         >Joined Players:</mat-label
       >
       <mat-selection-list #shoes [multiple]="false">
-        <mat-list-option *ngFor="let shoe of typesOfShoes" [value]="shoe">
+        <mat-list-option *ngFor="let shoe of players" [value]="shoe">
           {{ shoe }}
         </mat-list-option>
       </mat-selection-list>
     </div>
   </div>
   <button
+    *ngIf="isAdmin()"
     mat-raised-button
     color="primary"
     style="

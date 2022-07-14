@@ -52,6 +52,25 @@ namespace guess_the_song_API.Controllers
             return rooms;
         }
 
+        // GET: api/Rooms/5
+        [HttpGet]
+        [Route("getRoomFromCode/{id}")]
+        public async Task<ActionResult<Rooms>> GetRoomFromCode(string id)
+        {
+            if (_context.Rooms == null)
+            {
+                return NotFound();
+            }
+            var rooms = await _context.Rooms.FirstAsync(x => x.RoomCode == id);
+
+            if (rooms == null)
+            {
+                return NotFound();
+            }
+
+            return rooms;
+        }
+
         // PUT: api/Rooms/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

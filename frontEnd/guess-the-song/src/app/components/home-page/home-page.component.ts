@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Room } from 'src/app/Models/room.model';
+import { AuthService } from 'src/app/Services/auth.service';
+import { RoomService } from 'src/app/Services/rooms.service';
 
 @Component({
   selector: 'app-home-page',
@@ -8,13 +11,32 @@ import { Router } from '@angular/router';
 })
 export class HomePageComponent implements OnInit {
   public joinRoomVisible: boolean = false;
+  public roomCode: string;
 
-  constructor(public router: Router) {}
+  constructor(
+    public router: Router,
+    public roomService: RoomService,
+    public authService: AuthService
+  ) {}
 
   ngOnInit(): void {}
 
   public goToCreateRoom(): void {
-    this.router.navigate(['home-page/game-settings']);
+    let room: Room = {
+      joinedUsersIds: null,
+      adminId: this.authService.getUserId(),
+      noOfQuestions: null,
+      answerTime: null,
+      noOfAnswers: null,
+      roomCode: (Math.random() + 1).toString(36).substring(5),
+    };
+
+    this.roomService.createRoom(room).subscribe((response) => {
+      if (response.status == 201) {
+        this.roomService.sendCreatedRoomData(response.body);
+        this.router.navigate(['home-page/game-settings']);
+      }
+    });
   }
 
   public showJoinRoomInput(): void {
@@ -24,6 +46,13 @@ export class HomePageComponent implements OnInit {
   }
 
   public joinRoom(): void {
-    this.router.navigate(['home-page/game-settings/game']);
+    this.roomService
+      .getRoomFromRoomCode(this.roomCode)
+      .subscribe((response) => {
+        if (response.status == 200) {
+          this.roomService.sendCreatedRoomData(response.body);
+          this.router.navigate(['home-page/game-settings']);
+        }
+      });
   }
 }

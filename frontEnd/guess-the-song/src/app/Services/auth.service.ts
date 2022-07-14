@@ -45,4 +45,10 @@ export class AuthService {
       }
     );
   }
+
+  public getUserId(): string {
+    let token = localStorage.getItem('token') || '{}';
+    let userId: any = jwt_decode(token);
+    return userId.nameid;
+  }
 }

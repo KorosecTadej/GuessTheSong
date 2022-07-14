@@ -18,7 +18,7 @@
     </button>
     <mat-form-field *ngIf="joinRoomVisible" appearance="fill">
       <mat-label>Room code</mat-label>
-      <input type="password" matInput />
+      <input [(ngModel)]="roomCode" type="password" matInput />
     </mat-form-field>
     <button
       *ngIf="joinRoomVisible"
