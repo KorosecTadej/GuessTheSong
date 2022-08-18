@@ -7,7 +7,7 @@ import { Room } from '../Models/room.model';
   providedIn: 'root',
 })
 export class RoomService {
-  public room: Room;
+  public id: number;
   constructor(public httpClient: HttpClient) {}
 
   public createRoom(room: Room): Observable<any> {
@@ -26,12 +26,21 @@ export class RoomService {
     );
   }
 
-  public sendCreatedRoomData(room: Room): void {
-    this.room = room;
+  public sendCreatedRoomData(id: number): void {
+    this.id = id;
   }
 
-  public getRoomData(): Room {
-    return this.room;
+  public getRoomData(): number {
+    return this.id;
+  }
+
+  public getRoomFromId(roomId: number): Observable<any> {
+    return this.httpClient.get<any>(
+      `http://localhost:5198/api/Rooms/${roomId}`,
+      {
+        observe: 'response',
+      }
+    );
   }
 
   public getRoomFromRoomCode(roomCode: string): Observable<any> {

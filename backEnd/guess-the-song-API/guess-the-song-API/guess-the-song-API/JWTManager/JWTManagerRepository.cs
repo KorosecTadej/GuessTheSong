@@ -18,26 +18,37 @@ namespace guess_the_song_API.JWTManager
         }
         public Tokens Authenticate(Users users)
         {
-            if (!_context.Users.Any(x => x.Username == users.Username && x.Pass == users.Pass))
+            if (!_context.Users.Any(x => x.Username == users.Username))
             {
                 return null;
             }
-            var user = _context.Users.First(x => x.Username == users.Username && x.Pass == users.Pass);
+            
+            var user = _context.Users.First(x => x.Username == users.Username);
+            bool verified = BCrypt.Net.BCrypt.Verify(users.Pass, user.Pass);
 
-            // Else we generate JSON Web Token
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenKey = Encoding.UTF8.GetBytes(iconfiguration["JWT:Key"]);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            if (verified)
             {
-                Subject = new ClaimsIdentity(new Claim[]
+                // Else we generate JSON Web Token
+                var tokenHandler = new JwtSecurityTokenHandler();
+                var tokenKey = Encoding.UTF8.GetBytes(iconfiguration["JWT:Key"]);
+                var tokenDescriptor = new SecurityTokenDescriptor
                 {
+                    Subject = new ClaimsIdentity(new Claim[]
+                    {
                     new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString())
-                }),
-                Expires = DateTime.UtcNow.AddDays(30),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return new Tokens { Token = tokenHandler.WriteToken(token) };
+                    }),
+                    Expires = DateTime.UtcNow.AddDays(30),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
+                };
+                var token = tokenHandler.CreateToken(tokenDescriptor);
+                return new Tokens { Token = tokenHandler.WriteToken(token) };
+            }
+            else
+            {
+                return new Tokens { Token = null };
+            }
+
+
 
         }
     }

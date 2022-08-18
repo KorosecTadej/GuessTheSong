@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AppComponent } from './app.component';
 import { GameSettingsComponent } from './components/game-settings/game-settings.component';
 import { GameComponent } from './components/game/game.component';
 import { HomePageComponent } from './components/home-page/home-page.component';
@@ -16,6 +17,7 @@ const routes: Routes = [
     canActivate: [UnauthGuard],
   },
   { path: 'home-page', component: HomePageComponent, canActivate: [AuthGuard] },
+  { path: '', component: AppComponent, canActivate: [AuthGuard] },
   {
     path: 'home-page/game-settings',
     component: GameSettingsComponent,

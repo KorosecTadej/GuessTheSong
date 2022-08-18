@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using guess_the_song_API.Data;
 using guess_the_song_API.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 
 namespace guess_the_song_API.Controllers
 {
@@ -17,10 +18,12 @@ namespace guess_the_song_API.Controllers
     public class RoomsController : ControllerBase
     {
         private readonly DataContext _context;
+        private readonly IHubContext<GameHub> gameHub;
 
-        public RoomsController(DataContext context)
+        public RoomsController(DataContext context, IHubContext<GameHub> gameHub)
         {
             _context = context;
+            this.gameHub = gameHub;
         }
 
         // GET: api/Rooms

@@ -3,6 +3,8 @@ using guess_the_song_API.JWTManager;
 using guess_the_song_API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
+using BCryptNet = BCrypt.Net.BCrypt;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -15,11 +17,13 @@ namespace guess_the_song_API.Controllers
     {
         private readonly DataContext _context;
         private readonly IJWTManagerRepository _jWTManager;
+        private readonly IHubContext<GameHub> gameHub;
 
-        public UsersController(DataContext context, IJWTManagerRepository jWTManager)
+        public UsersController(DataContext context, IJWTManagerRepository jWTManager, IHubContext<GameHub> gameHub)
         {
             _context = context;
             _jWTManager = jWTManager;
+            this.gameHub = gameHub;
         }
         // GET: api/<UsersController>
         [HttpGet]
@@ -34,7 +38,7 @@ namespace guess_the_song_API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult> Get(int id)
         {
-            var user = _context.Users.First(x => x.UserId == id);
+            var user = GetUser(id);
             return Ok(user);
         }
 
@@ -45,6 +49,7 @@ namespace guess_the_song_API.Controllers
         {
             try
             {
+                value.Pass = BCryptNet.HashPassword(value.Pass);
                 _context.Users.Add(value);
                 await _context.SaveChangesAsync();
 
@@ -80,5 +85,11 @@ namespace guess_the_song_API.Controllers
         public void Delete(int id)
         {
         }
+
+        public Users GetUser(int id)
+        {
+            return _context.Users.First(x => x.UserId == id);
+        }
+
     }
 }

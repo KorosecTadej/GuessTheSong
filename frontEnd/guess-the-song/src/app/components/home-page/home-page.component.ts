@@ -23,17 +23,17 @@ export class HomePageComponent implements OnInit {
 
   public goToCreateRoom(): void {
     let room: Room = {
-      joinedUsersIds: null,
+      joinedUsersIds: null, //JSON.stringify(this.authService.getUser()),
       adminId: this.authService.getUserId(),
-      noOfQuestions: null,
-      answerTime: null,
-      noOfAnswers: null,
+      noOfQuestions: '5',
+      answerTime: '10',
+      noOfAnswers: '4',
       roomCode: (Math.random() + 1).toString(36).substring(5),
     };
 
     this.roomService.createRoom(room).subscribe((response) => {
       if (response.status == 201) {
-        this.roomService.sendCreatedRoomData(response.body);
+        this.roomService.sendCreatedRoomData(response.body.roomId);
         this.router.navigate(['home-page/game-settings']);
       }
     });
@@ -50,7 +50,7 @@ export class HomePageComponent implements OnInit {
       .getRoomFromRoomCode(this.roomCode)
       .subscribe((response) => {
         if (response.status == 200) {
-          this.roomService.sendCreatedRoomData(response.body);
+          this.roomService.sendCreatedRoomData(response.body.roomId);
           this.router.navigate(['home-page/game-settings']);
         }
       });
