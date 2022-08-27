@@ -83,8 +83,10 @@ namespace guess_the_song_API.Controllers
             {
                 return BadRequest();
             }
+            var room = await _context.Rooms.FirstAsync(x => x.RoomId == rooms.RoomId);
+            room.JoinedUsersIds += "," + rooms.JoinedUsersIds;
 
-            _context.Entry(rooms).State = EntityState.Modified;
+            _context.Entry(room).State = EntityState.Modified;
 
             try
             {

@@ -22,7 +22,7 @@ export class GameSettingsComponent implements OnInit, AfterViewInit, OnDestroy {
   //SignalR
   public connection: any;
 
-  public players: User[] = [];
+  public players: string[] = [];
   public autoTicks = false;
   public showTicks = false;
   public thumbLabel = false;
@@ -48,37 +48,38 @@ export class GameSettingsComponent implements OnInit, AfterViewInit, OnDestroy {
       this.roomService.getRoomFromId(this.roomId).subscribe((response) => {
         if (response.status == 200) {
           this.room = response.body;
+          console.log('pred');
           this.NumberOfQuestionsValue = Number(this.room.noOfQuestions);
           this.QuestionTimeValue = Number(this.room.answerTime);
           this.NoOfAnswers = this.room.noOfAnswers;
           //this.players.push(JSON.parse(this.room.joinedUsersIds));
-          /*this.players =
+          this.players =
             this.room.joinedUsersIds == null
               ? []
-              : this.room.joinedUsersIds.split(',');*/
+              : this.room.joinedUsersIds.split(',');
+          this.players.push(this.authService.getUserId());
           this.loading = false;
         }
       });
     }, 1000);
 
-    this.authService.getUser().subscribe((response) => {
+    /*this.authService.getUser().subscribe((response) => {
       this.user = response.body;
-    });
+    });*/
   }
 
   public ngAfterViewInit(): void {
     this.signalRService.startConnection();
 
-    setTimeout(() => {
-      this.signalRService.sendPlayerJoin(this.user);
+    this.signalRService.receiveStart();
+    this.signalRService.getProfileObs().subscribe((player) => {
+      this.start();
+    });
+    setTimeout(() => {}, 2000);
+  }
 
-      this.signalRService.receivePlayerJoin();
-      this.signalRService.getProfileObs().subscribe((player) => {
-        if (!player) return;
-        this.players.push(player);
-        console.log(this.players);
-      });
-    }, 2000);
+  public signalR() {
+    this.signalRService.sendStart(this.user);
   }
 
   public getSliderTickInterval(): number | 'auto' {
@@ -96,8 +97,14 @@ export class GameSettingsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public startGame(): void {
+    this.signalR();
+  }
+
+  public start() {
+    console.log(this.players);
+    console.log(this.room);
     let updateRoom: Room = {
-      roomId: this.room.roomId,
+      roomId: this.roomId,
       joinedUsersIds: this.players.toString(),
       adminId: this.room.adminId,
       noOfQuestions: this.NumberOfQuestionsValue.toString(),

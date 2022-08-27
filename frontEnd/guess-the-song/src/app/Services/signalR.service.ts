@@ -28,11 +28,11 @@ export class signalRService {
       .catch((err) => console.log('Error while starting connection: ' + err));
   }
 
-  public sendPlayerJoin(user: User): void {
+  public sendStart(user: User): void {
     this.connection.invoke('JoinRoom', user);
   }
 
-  public receivePlayerJoin(): any {
+  public receiveStart(): any {
     return this.connection.on('join_room', (user) => {
       this.setProfileObs(user);
     });

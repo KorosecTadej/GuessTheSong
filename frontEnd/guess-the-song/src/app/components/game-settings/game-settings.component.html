@@ -80,37 +80,27 @@
         </mat-select>
       </mat-form-field>
     </div>
-    <div
-      class="RightTab"
-      style="width: 15%; border-style: solid; transform: translateY(-115px)"
+    <button
+      *ngIf="isAdmin()"
+      mat-raised-button
+      color="primary"
+      style="
+        position: relative;
+        top: 10%;
+        height: 60px;
+        width: 260px;
+        margin-bottom: 20px;
+      "
+      (click)="startGame()"
     >
-      <mat-list role="list">
-        <mat-list-item style="color: purple" *ngFor="let player of players">{{
-          player.Ime
-        }}</mat-list-item>
-      </mat-list>
-    </div>
+      Start game
+    </button>
   </div>
-  <button
-    *ngIf="isAdmin()"
-    mat-raised-button
-    color="primary"
-    style="
-      position: relative;
-      top: 10%;
-      height: 60px;
-      width: 260px;
-      margin-bottom: 20px;
-    "
-    (click)="startGame()"
-  >
-    Start game
-  </button>
-</div>
 
-<div *ngIf="loading" class="lds-ring">
-  <div></div>
-  <div></div>
-  <div></div>
-  <div></div>
+  <div *ngIf="loading" class="lds-ring">
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
 </div>

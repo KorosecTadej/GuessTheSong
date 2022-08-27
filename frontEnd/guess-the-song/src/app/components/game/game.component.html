@@ -1,1 +1,21 @@
-<div class="background"></div>
+<div class="background">
+  <div
+    *ngIf="currentTrack && NoOfAnswers"
+    style="display: flex; flex-direction: column"
+  >
+    <div *ngIf="playerWork" style="margin-bottom: 50%">
+      <audio controls autoplay name="media">
+        <source [src]="currentTrack" type="audio/mpeg" />
+      </audio>
+    </div>
+
+    <button
+      style="margin-bottom: 10px"
+      mat-raised-button
+      *ngFor="let track of iterations.tracks"
+      (click)="answerQuestion(track.name)"
+    >
+      {{ track.name }}
+    </button>
+  </div>
+</div>

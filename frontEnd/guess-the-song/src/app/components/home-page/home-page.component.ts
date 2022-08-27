@@ -23,7 +23,7 @@ export class HomePageComponent implements OnInit {
 
   public goToCreateRoom(): void {
     let room: Room = {
-      joinedUsersIds: null, //JSON.stringify(this.authService.getUser()),
+      joinedUsersIds: this.authService.getUserId(), //JSON.stringify(this.authService.getUser()),
       adminId: this.authService.getUserId(),
       noOfQuestions: '5',
       answerTime: '10',

@@ -48,8 +48,6 @@ namespace guess_the_song_API.JWTManager
                 return new Tokens { Token = null };
             }
 
-
-
         }
     }
 }
