@@ -4,6 +4,7 @@ using guess_the_song_API.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using BCryptNet = BCrypt.Net.BCrypt;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -76,8 +77,13 @@ namespace guess_the_song_API.Controllers
 
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task updateScoreAsync(string id, [FromBody] int score)
         {
+            var user = GetUser(Int32.Parse(id));
+            user.Score = score;
+            _context.Entry(user).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
         }
 
         // DELETE api/<UsersController>/5

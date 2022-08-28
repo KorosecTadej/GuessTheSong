@@ -10,5 +10,6 @@ namespace guess_the_song_API.Models
         public string Priimek { get; set; }
         public string Username { get; set; }
         public string Pass { get; set; }
+        public int? Score { get; set; }
     }
 }

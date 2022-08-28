@@ -41,18 +41,15 @@ export class GameSettingsComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {}
 
   async ngOnInit(): Promise<void> {
-    //this.players = [];
     setTimeout(() => {
       this.roomId = this.roomService.getRoomData();
 
       this.roomService.getRoomFromId(this.roomId).subscribe((response) => {
         if (response.status == 200) {
           this.room = response.body;
-          console.log('pred');
           this.NumberOfQuestionsValue = Number(this.room.noOfQuestions);
           this.QuestionTimeValue = Number(this.room.answerTime);
           this.NoOfAnswers = this.room.noOfAnswers;
-          //this.players.push(JSON.parse(this.room.joinedUsersIds));
           this.players =
             this.room.joinedUsersIds == null
               ? []
@@ -62,10 +59,6 @@ export class GameSettingsComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       });
     }, 1000);
-
-    /*this.authService.getUser().subscribe((response) => {
-      this.user = response.body;
-    });*/
   }
 
   public ngAfterViewInit(): void {
@@ -101,8 +94,6 @@ export class GameSettingsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public start() {
-    console.log(this.players);
-    console.log(this.room);
     let updateRoom: Room = {
       roomId: this.roomId,
       joinedUsersIds: this.players.toString(),

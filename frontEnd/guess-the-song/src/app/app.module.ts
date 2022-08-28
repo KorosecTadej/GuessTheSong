@@ -21,6 +21,8 @@ import { GameSettingsComponent } from './components/game-settings/game-settings.
 import { MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatListModule } from '@angular/material/list';
+import { ScoreBoardComponent } from './components/score-board/score-board.component';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,7 @@ import { MatListModule } from '@angular/material/list';
     HeaderComponent,
     GameComponent,
     GameSettingsComponent,
+    ScoreBoardComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,6 +49,7 @@ import { MatListModule } from '@angular/material/list';
     MatSelectModule,
     MatSliderModule,
     MatListModule,
+    MatTableModule,
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

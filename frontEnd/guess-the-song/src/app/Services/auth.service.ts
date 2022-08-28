@@ -26,6 +26,16 @@ export class AuthService {
     );
   }
 
+  public updateScore(userId: string, score: number): Observable<any> {
+    return this.httpClient.put<any>(
+      `http://localhost:5198/api/Users/${userId}`,
+      score,
+      {
+        observe: 'response',
+      }
+    );
+  }
+
   public isLoggedIn(): boolean {
     const token = localStorage.getItem('token');
     if (token) {
@@ -40,6 +50,15 @@ export class AuthService {
     let userId: any = jwt_decode(token);
     return this.httpClient.get<any>(
       `http://localhost:5198/api/Users/` + userId.nameid,
+      {
+        observe: 'response',
+      }
+    );
+  }
+
+  public getUserById(id: string): Observable<any> {
+    return this.httpClient.get<any>(
+      `http://localhost:5198/api/Users/` + Number(id),
       {
         observe: 'response',
       }

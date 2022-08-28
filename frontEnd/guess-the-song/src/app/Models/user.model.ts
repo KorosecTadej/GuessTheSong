@@ -4,4 +4,5 @@ export class User {
   Priimek: string | undefined | null = null;
   Username: string | undefined | null = null;
   Pass: string | undefined | null = null;
+  Score?: number | undefined | null = null;
 }

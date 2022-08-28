@@ -36,7 +36,9 @@ export class GameComponent implements OnInit {
   public currentTrack: any;
   public currentTrackName: any;
   public next: number = 0;
-  public changeUserValue: number = 0;
+  public currentUser: User;
+  public endGame: boolean = false;
+  public score: number = 0;
   constructor(
     public roomService: RoomService,
     public router: Router,
@@ -46,7 +48,6 @@ export class GameComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    //this.players = [];
     setTimeout(() => {
       this.roomId = this.roomService.getRoomData();
 
@@ -56,23 +57,26 @@ export class GameComponent implements OnInit {
           this.NumberOfQuestionsValue = Number(this.room.noOfQuestions);
           this.QuestionTimeValue = Number(this.room.answerTime);
           this.NoOfAnswers = new Array(Number(this.room.noOfAnswers));
-          console.log(this.room.joinedUsersIds);
-          //this.players.push(JSON.parse(this.room.joinedUsersIds));
           this.players =
             this.room.joinedUsersIds == null
               ? []
               : this.room.joinedUsersIds.split(',');
           this.loading = false;
           this.players = [...new Set(this.players)];
+          console.log(this.players);
         }
       });
     }, 1000);
 
     this.userId = this.authService.getUserId();
 
+    this.authService.getUser().subscribe((x) => {
+      this.currentUser = x.body;
+    });
+
     setTimeout(() => {
       this.spotifyService
-        .getSongs('top10', this.NumberOfQuestionsValue.toString())
+        .getSongs('justinBieber', this.NumberOfQuestionsValue.toString())
         .subscribe((response) => {
           for (let track of response.tracks.items) {
             this.ids += track.data.id + ',';
@@ -84,35 +88,70 @@ export class GameComponent implements OnInit {
         });
     }, 1500);
 
+    this.startGame(0);
+  }
+
+  public startGame(player: number): void {
     setTimeout(() => {
-      if (this.userId == this.players[0]) {
+      if (this.userId == this.players[player]) {
         this.currentTrack = this.iterations.tracks[0].preview_url;
         this.currentTrackName = this.iterations.tracks[0].name;
       }
     }, 4000);
   }
 
+  public ngAfterViewInit(): void {
+    this.signalRService.startConnection();
+
+    if (this.userId != this.players[0]) {
+      this.signalRService.receiveChangeUser();
+      this.signalRService.getChangeUser().subscribe((player) => {
+        this.changeUser(1);
+      });
+      setTimeout(() => {}, 2000);
+    }
+
+    this.signalRService.receiveScore();
+    this.signalRService.getScoreObs().subscribe((player) => {
+      if (player) {
+        this.router.navigate(['home-page/game-settings/game/score-board']);
+      }
+    });
+    setTimeout(() => {}, 2000);
+  }
+
   public changeQuestion(nOfQuestion: number) {
-    console.log(nOfQuestion);
     this.currentTrack = this.iterations.tracks[nOfQuestion].preview_url;
     this.currentTrackName = this.iterations.tracks[nOfQuestion].name;
-    console.log(this.currentTrack);
     this.playerWork = true;
   }
 
   public answerQuestion(trackName: string): void {
     if (this.currentTrackName == trackName) {
       window.alert('Your answer is correct! :)');
+      this.score += 100;
     } else {
       window.alert('Your answer is incorrect! :(');
     }
     this.playerWork = false;
     setTimeout(() => {
-      console.log(this.next);
-      console.log(this.iterations.tracks.length);
-      if (this.next == 4) {
-        //this.next == this.NumberOfQuestionsValue
-        this.changeUser((this.changeUserValue += 1));
+      if (this.next >= 4) {
+        if (this.endGame == false) {
+          if (this.userId == this.players[0]) {
+            this.authService
+              .updateScore(this.userId, this.score)
+              .subscribe((response) => {});
+            this.signalRService.sendChangeUser(this.currentUser);
+          } else {
+            this.authService
+              .updateScore(this.userId, this.score)
+              .subscribe((response) => {
+                if (response.status == 200) {
+                  this.signalRService.sendScore(this.currentUser);
+                }
+              });
+          }
+        }
       } else {
         this.changeQuestion((this.next += 1));
       }
@@ -121,7 +160,8 @@ export class GameComponent implements OnInit {
 
   public changeUser(changeUserValue: number) {
     if (this.userId == this.players[changeUserValue]) {
-      this.next = -1;
+      this.next = 0;
+      this.startGame(changeUserValue);
     }
   }
 }
