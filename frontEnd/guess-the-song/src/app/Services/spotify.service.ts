@@ -13,7 +13,7 @@ export class SpotifyService {
       'Content-Type': 'application/json',
       Accept: 'application/json',
       'Access-Control-Allow-Headers': 'Content-Type',
-      'X-RapidAPI-Key': 'f369b06c3dmsh5f0a33198674d87p1e8564jsnec5dc3e0b0d0',
+      'X-RapidAPI-Key': '***************************************',
       'X-RapidAPI-Host': 'spotify23.p.rapidapi.com',
       observe: 'response',
     };
